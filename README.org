@@ -1,5 +1,5 @@
 
-* Docker Compose File for OHIF with ORTHANC
+* Docker Compose File for OHIF with ORTHANC, and dicom-router satusehat
 
 =Ohif=:  /(OHIF) Viewer/ is an open source, web-based, medical imaging platform.
 
@@ -36,3 +36,6 @@ Default Username is =mapdr= & password is =changestrongpassword=
  - PORT: 4242
  - IP: your-server-ip
 3. If you have file locally install httplib2 with pip =python ImportDicomFiles.py localhost 8042 /path/to/input/dir=
+
+sumber asli:
+https://github.com/hyper4saken/ohif-orthanc.git
