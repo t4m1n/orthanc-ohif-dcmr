@@ -43,7 +43,7 @@ services:
       - pacs
 
   dicom:
-    image: registry.dto.kemkes.go.id/pub/dicom-router:latest
+    image: xxxxxxxxxxxxxxx
     container_name: dicom-router
     restart: always
     ports:
