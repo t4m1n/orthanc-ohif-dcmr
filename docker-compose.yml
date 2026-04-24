@@ -1,0 +1,62 @@
+version: "3"
+services:
+  pacs:
+    container_name: orthanc
+    image: jodogne/orthanc-plugins
+    ports:
+      - 8042:8042
+      - 4242:4242
+    volumes:
+      - ./orthanc.json:/etc/orthanc/orthanc.json:ro
+      - ./script.lua:/etc/orthanc/script.lua:ro
+      - ./orthanc_db:/var/lib/orthanc/db/
+    restart: always
+    networks:
+      - pacs
+
+  ohif_viewer:
+    container_name: ohif
+    image: ohif/viewer
+    ports:
+      - 3000:80
+    environment:
+      - APP_CONFIG:/usr/share/nginx/html/app-config.js
+    volumes:
+      - ./nginx_ohif.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./ohif.js:/usr/share/nginx/html/app-config.js:ro
+      - ./logo.png:/usr/share/nginx/html/logo.png:ro
+    restart: always
+    networks:
+      - pacs
+
+  postgres:
+    image: postgres:13
+    container_name: orthanc-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: orthanc
+      POSTGRES_PASSWORD: orthancpass
+      POSTGRES_DB: orthanc
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+    networks:
+      - pacs
+
+  dicom:
+    image: registry.dto.kemkes.go.id/pub/dicom-router:latest
+    container_name: dicom-router
+    restart: always
+    ports:
+      - "11112:11112"
+      - "80:8080"
+    environment:
+      - ORG_ID=100028073
+      - CLIENT=y8OSwoBrTqc9vTG8Zjdjg90WhPA53nrMGOQU48AfyoC0UO7A
+      - SECRET=Y9AC7Z9BSqTRkb9ngaZbNaERqztlHuZ7vNrBrFUWuGngQg8L0geqKtAUGMT5I8E6
+      - URL=https://api-satusehat.kemkes.go.id
+    networks:
+      - pacs
+
+networks:
+  pacs:
+    external: true
