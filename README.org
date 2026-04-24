@@ -12,9 +12,9 @@ docker network create pacs
 
 *** Clone This Repo
 #+begin_src bash
-git clone https://github.com/hyper4saken/ohif-orthanc.git
-cd ohif-orthanc
-docker-compose up -d
+git clone https://github.com/t4m1n/orthanc-ohif-dcmr.git
+cd orthanc-ohif-dcmr
+docker-compose up -d --build
 #+end_src
 
 It will also create a new /bridge-network/ pacs.
