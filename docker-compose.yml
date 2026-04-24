@@ -50,9 +50,9 @@ services:
       - "11112:11112"
       - "80:8080"
     environment:
-      - ORG_ID=100028073
-      - CLIENT=y8OSwoBrTqc9vTG8Zjdjg90WhPA53nrMGOQU48AfyoC0UO7A
-      - SECRET=Y9AC7Z9BSqTRkb9ngaZbNaERqztlHuZ7vNrBrFUWuGngQg8L0geqKtAUGMT5I8E6
+      - ORG_ID=xxxxxxxxxxxxxxx
+      - CLIENT=xxxxxxxxxxxxxxx
+      - SECRET=xxxxxxxxxxxxxxx
       - URL=https://api-satusehat.kemkes.go.id
     networks:
       - pacs
