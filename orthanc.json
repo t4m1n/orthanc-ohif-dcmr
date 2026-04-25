@@ -1,17 +1,29 @@
 {
-  "Name" : "M A P D R",
+  "Name" : "RSUNAND",
   "StorageDirectory" : "/var/lib/orthanc/db",
   "IndexDirectory" : "/var/lib/orthanc/db",
   "StorageCompression" : true,
   "MaximumStorageSize" : 0,
   "MaximumPatientCount" : 0,
-  "MaximumStorageCacheSize" : 128,
+  // "MaximumStorageCacheSize" : 128,
+  "MaximumStorageCacheSize" : 4096,
   "LuaScripts" : [
+    "/etc/orthanc/script.lua"
   ],
   "Plugins" : [ 
     "/usr/share/orthanc/plugins", "/usr/local/share/orthanc/plugins"
   ],
-  "ConcurrentJobs" : 2,
+  "PostgreSQL": {
+    "EnableIndex": true,
+    "EnableStorage": false,
+    "Host": "orthanc-postgres",
+    "Port": 5432,
+    "Database": "orthanc",
+    "Username": "orthanc",
+    "Password": "orthancpass"
+  },
+  // "ConcurrentJobs" : 2,
+  "ConcurrentJobs" : 8,
   "HttpServerEnabled" : true,
   "OrthancExplorerEnabled" : true,
   "HttpPort" : 8042,
@@ -21,11 +33,17 @@
   "WebDavDeleteAllowed" : false,
   "WebDavUploadAllowed" : true,
   "DicomServerEnabled" : true,
-  "DicomAet" : "MAPDR",
+  "DicomAet" : "RSUNAND",
   "DicomCheckCalledAet" : true,
   "DicomPort" : 4242,
   "DefaultEncoding" : "Latin1",
-  "AcceptedTransferSyntaxes" : [ "1.2.840.10008.1.*" ],
+  // "AcceptedTransferSyntaxes" : [ "1.2.840.10008.1.*" ],
+  "AcceptedTransferSyntaxes": [
+   "1.2.840.10008.1.2",
+   "1.2.840.10008.1.2.1",
+   "1.2.840.10008.1.2.4.80",
+   "1.2.840.10008.1.2.4.90"
+  ],
   "UnknownSopClassAccepted" : false,
   "DicomScpTimeout" : 30,
   "RemoteAccessAllowed" : true,
@@ -36,7 +54,7 @@
   "SslTrustedClientCertificates" : "trustedClientCertificates.pem",
   "AuthenticationEnabled" : true,
     "RegisteredUsers" : {
-    "mapdr" : "changestrongpassword"
+    "rsunand" : "rsunand123"
   },
   "DicomTlsEnabled" : false,
   "DicomTlsRemoteCertificateRequired" : true,
@@ -49,12 +67,14 @@
   "DicomCheckModalityHost" : false,
   "DicomModalities" : {
       // "MAPDRX" : [ "MAPDR", "127.0.0.1", 11112]
+      "DCMROUTER" : [ "DCMROUTER", "dicom-router", 11112]
   },
   "DicomModalitiesInDatabase" : false,
   "DicomEchoChecksFind" : false,
   "DicomScuTimeout" : 10,
   "DicomScuPreferredTransferSyntax" : "1.2.840.10008.1.2.1",
-  "DicomThreadsCount" : 4,
+  // "DicomThreadsCount" : 4,
+  "DicomThreadsCount" : 8,
   "OrthancPeers" : {
   },
 
@@ -100,21 +120,31 @@
   "StorageCommitmentReportsSize" : 100,
   "TranscodeDicomProtocol" : true,
   "BuiltinDecoderTranscoderOrder" : "After",
-  "IngestTranscoding" : "1.2.840.10008.1.2.4.91",
-  "IngestTranscodingOfUncompressed" : true,
-  "IngestTranscodingOfCompressed" : true,
+  // "IngestTranscoding" : "1.2.840.10008.1.2.4.91",
+  // "IngestTranscoding" : "1.2.840.10008.1.2.4.80",
+  "IngestTranscodingOfUncompressed" : false,
+  "IngestTranscodingOfCompressed" : false,
   "DicomLossyTranscodingQuality" : 90,
   "SyncStorageArea" : true,
   "MallocArenaMax" : 5,
   "DeidentifyLogs" : true,
   "DeidentifyLogsDicomVersion" : "2021b",
-  "MaximumPduLength" : 16384,
+  // "MaximumPduLength" : 16384,
+  "MaximumPduLength" : 131072,
   "CheckRevisions" : false,
   "SynchronousZipStream" : true,
   "ZipLoaderThreads": 0,
   "Warnings" : {
     "W001_TagsBeingReadFromStorage": true,
     "W002_InconsistentDicomTagsInDb": true
+  },
+  "HttpHeaders": {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Allow-Headers": "Content-Type"
+  },
+  "DicomWeb": {
+    "Enable": true,
+    "Root": "/dicom-web/"
   }
-
 }
