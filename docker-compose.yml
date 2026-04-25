@@ -42,20 +42,54 @@ services:
     networks:
       - pacs
 
+  # dicom:
+  #   image: registry.dto.kemkes.go.id/pub/dicom-router:latest
+  #   container_name: dicom-router
+  #   restart: always
+  #   ports:
+  #     - "11112:11112"
+  #     - "80:8080"
+  #   environment:
+  #     - ORG_ID=100028073
+  #     - CLIENT=y8OSwoBrTqc9vTG8Zjdjg90WhPA53nrMGOQU48AfyoC0UO7A
+  #     - SECRET=Y9AC7Z9BSqTRkb9ngaZbNaERqztlHuZ7vNrBrFUWuGngQg8L0geqKtAUGMT5I8E6
+  #     - URL=https://api-satusehat.kemkes.go.id
+  #   networks:
+  #     - pacs
+
   dicom:
-    image: xxxxxxxxxxxxxxx
     container_name: dicom-router
-    restart: always
+
+    image: registry.dto.kemkes.go.id/pub/dicom-router:latest
+    platform: linux/amd64
+    restart: unless-stopped
+
     ports:
       - "11112:11112"
-      - "80:8080"
+      - "8080:8080"
+
     environment:
-      - ORG_ID=xxxxxxxxxxxxxxx
-      - CLIENT=xxxxxxxxxxxxxxx
-      - SECRET=xxxxxxxxxxxxxxx
-      - URL=https://api-satusehat.kemkes.go.id
+      TZ: Asia/Jakarta
+
+      # Variabel di bawah ini hanya dipakai jika router.conf masih memakai placeholder
+      # seperti $URL, $AE_TITLE, $ORG_ID, dll.
+      # Jika router.conf sudah final, nilai kosong ini aman diabaikan.
+      URL: ""
+      AE_TITLE: "DCMROUTER"
+      ORG_ID: ""
+      CLIENT: ""
+      SECRET: ""
+      WEBHOOK_URL: ""
+      WEBHOOK_USER: ""
+      WEBHOOK_PASSWORD: ""
+
+    volumes:
+      # router.conf diletakkan satu folder dengan docker-compose.yml
+      - ./router.conf:/app/router.conf
+
     networks:
       - pacs
+
 
 networks:
   pacs:
